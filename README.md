@@ -1,2 +1,2 @@
-# tic-tac-toe
-Browser Tic Tac Toe
+Tic Tac Toe
+A Tic-Tac-Toe game on the browser
