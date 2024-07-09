@@ -8,7 +8,23 @@
     <script src="script.js" defer></script>
 </head>
 <body>
-    <h1>Open up the console</h1>
-    
+    <header class="header">
+        <h1>Simple Tic Tac Toe</h1>
+        <form action="#">
+            <div>
+                <label for="player-one">Player One:</label>
+                <input type="text" name="player-one" id="player-one" placeholder="Please enter your first name" required>
+            </div>
+            <div>
+                <label for="player-two">Player Two:</label>
+                <input type="text" name="player-two" id="player-two" placeholder="Please enter your first name" required>
+            </div>
+            <button type="submit">Start Game</button>
+        </form>
+        <button type="button" class="reset-button">Reset Board</button>
+    </header> 
+    <main class="game-board">
+
+    </main>   
 </body>
 </html>

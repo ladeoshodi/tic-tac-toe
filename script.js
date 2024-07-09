@@ -141,4 +141,4 @@ function playGame() {
 console.log("This is a tic tac toe game on the console");
 console.log("You win by ensuring that 3 of your markers ('X' or 'O') lines up vertically, horizontally or diagonally");
 
-playGame();
+// playGame();
