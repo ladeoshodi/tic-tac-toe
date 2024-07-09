@@ -91,21 +91,27 @@ const gameBoard = (function() {
 
 const displayController = (function(){    
 
-    function displayTurn(playerName, playerMarker) {
-        const playerTurn = document.querySelector(".player-turn-display");
-        playerTurn.textContent = `${playerName}'s turn to play [${playerMarker}]`;
+    function displayPlayerTurn(playerName, playerMarker) {
+        const playerTurnDisplay = document.querySelector(".player-turn-display");
+        playerTurnDisplay.textContent = `${playerName}'s turn to play [${playerMarker}]`;
     }
 
-    function displayMarker(element, marker) {
+    function displayBoardMarker(element, marker) {
         element.target.textContent = marker;
     }
 
-    function displayWinner() {
+    function displayWinner(playerName, playerDraw=false) {
         const playerWinDisplay = document.querySelector(".player-win-display");
-
+        if (playerDraw) {
+            playerWinDisplay.textContent = "It's a draw!";
+            alert("It's a draw!");
+        } else {
+            playerWinDisplay.textContent = `${playerName} wins`;
+            alert(`${playerName} wins!`);
+        }
     }
 
-    return { displayTurn, displayMarker, displayWinner }
+    return { displayPlayerTurn, displayBoardMarker, displayWinner }
 
 })();
 
@@ -117,12 +123,13 @@ function createPlayer(name, marker) {
     function play(coordX, coordY, element) {
         gameBoard.placeMarker(Number(coordX), Number(coordY), playerMarker);
         // display marker on the board
-        displayController.displayMarker(element, playerMarker);
+        displayController.displayBoardMarker(element, playerMarker);
     }
 
     return { playerName, playerMarker, play };
 }
 
+// play game
 function playGame(e) {
     e.preventDefault();
 
@@ -136,7 +143,7 @@ function playGame(e) {
     let playerMarker = playerOne.playerMarker;
 
     // Display the active player
-    displayController.displayTurn(player, playerMarker);
+    displayController.displayPlayerTurn(player, playerMarker);
 
     function onCellClick(e) {
         // get the coord of the cell that was clicked
@@ -156,18 +163,16 @@ function playGame(e) {
         }
 
         // Display the active player
-        displayController.displayTurn(player, playerMarker);
-
-        console.log(gameBoard.currentBoard());
+        displayController.displayPlayerTurn(player, playerMarker);
 
         if (gameBoard.checkWin().win) {
             if (gameBoard.checkWin().marker === playerOne.playerMarker) {
-                console.log(`${playerOne.playerName} wins!!!`)
+                displayController.displayWinner(playerOne.playerName);
             } else {
-                console.log(`${playerTwo.playerName} wins!!!`)
+                displayController.displayWinner(playerTwo.playerName);
             }
-        } else {
-            console.log("It's a draw!")
+        } else if (gameBoard.checkBoardComplete() && !gameBoard.checkWin().win) {
+            displayController.displayWinner(player, playerDraw=true);
         }
     }
 
@@ -178,8 +183,6 @@ function playGame(e) {
         cell.addEventListener("click", onCellClick, {once: true});
     }
 };
-
-// play game
 
 // Listen for form submission
 playerInputForm.addEventListener("submit", playGame);
