@@ -10,14 +10,14 @@
 <body>
     <header class="header">
         <h1>Simple Tic Tac Toe</h1>
-        <form action="#">
+        <form action="#" class="player-input-form">
             <div>
                 <label for="player-one">Player One:</label>
-                <input type="text" name="player-one" id="player-one" placeholder="Enter name" required>
+                <input type="text" name="player-one" id="player-one" placeholder="Enter name" value="M" required>
             </div>
             <div>
                 <label for="player-two">Player Two:</label>
-                <input type="text" name="player-two" id="player-two" placeholder="Enter name" required>
+                <input type="text" name="player-two" id="player-two" placeholder="Enter name" value="A" required>
             </div>
             <button type="submit">Start Game</button>
         </form>
@@ -25,9 +25,8 @@
     </header> 
     <main class="main">
         <div class="game-info">
-            <h1>Player Name</h1>
-            <h3>Player 1's turn</h3>
-            <h2>Player 1 wins!</h3>
+            <h1 class="player-turn-display">Player Name</h1>
+            <h2 class="player-win-display">Player 1 wins!</h3>
         </div>
         <div class="game-board">
             <div></div>

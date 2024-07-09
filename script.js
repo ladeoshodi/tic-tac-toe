@@ -1,3 +1,7 @@
+const playerInputForm = document.querySelector(".player-input-form");
+const resetButton = document.querySelector(".reset-button");
+
+
 // create game board
 const gameBoard = (function() {
     let board = [
@@ -85,6 +89,23 @@ const gameBoard = (function() {
     return { currentBoard, resetBoard, placeMarker, checkEmptyCells, checkWin, checkBoardComplete}
 })();
 
+const displayController = (function(){
+    const gameBoardDisplay = document.querySelector(".game-board");
+    
+    const playerWinDisplay = document.querySelector(".player-win-display");
+
+    function displayTurn(PlayerName) {
+        const playerTurn = document.querySelector(".player-turn-display");
+        playerTurn.textContent = `${PlayerName}'s turn to play`;
+    }
+
+    function displayWinner() {
+
+    }
+
+    return { displayTurn, displayWinner }
+
+})();
 
 // Create a player object
 function createPlayer(name, marker) {
@@ -100,9 +121,15 @@ function createPlayer(name, marker) {
     return { playerName, playerMarker, play };
 }
 
-function playGame() {
-    let playerOne = createPlayer(prompt("Player One: please enter your name"), "X");
-    let playerTwo = createPlayer(prompt("Player Two: please enter your name"), "O");
+function playGame(e) {
+    e.preventDefault();
+
+    const playerOneInput = document.querySelector("#player-one");
+    const playerTwoInput = document.querySelector("#player-two");
+
+    let playerOne = createPlayer(playerOneInput.value, "X");
+    let playerTwo = createPlayer(playerTwoInput.value, "O");
+
     let player = playerOne.playerName;
 
     while (!gameBoard.checkBoardComplete()) {
@@ -111,19 +138,22 @@ function playGame() {
             break;
         }
 
-        console.log(`it's ${player}'s turn`);
+        // Display the active player
+        displayController.displayTurn(player);
 
         // place the marker on the board
         if (player === playerOne.playerName) {
-            playerOne.play();
+            // playerOne.play();
             player = playerTwo.playerName;
         } else {
-            playerTwo.play();
+            // playerTwo.play();
             player = playerOne.playerName;
         }
 
         // display board after each play
         console.log(gameBoard.currentBoard());
+
+        break;
     }
 
     if (gameBoard.checkWin().win) {
@@ -138,7 +168,4 @@ function playGame() {
 };
 
 // play game
-console.log("This is a tic tac toe game on the console");
-console.log("You win by ensuring that 3 of your markers ('X' or 'O') lines up vertically, horizontally or diagonally");
-
-// playGame();
+playerInputForm.addEventListener("submit", playGame);
