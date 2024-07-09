@@ -65,6 +65,12 @@ form>div>input {
     padding: 10px;
     height: 90px;
 }
+.game-board-cell {
+    font-size: 2.5rem;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+}
 
 @media screen and (max-width: 500px) {
     .header form {
