@@ -29,11 +29,23 @@ const gameBoard = (function() {
     }
 
     function resetBoard() {
+        // reset board internal memory
         board = [
             ["", "", ""],
             ["", "", ""],
             ["", "", ""]
         ]
+
+        // reset board display
+        const gameBoardCells = document.querySelectorAll(".game-board-cell");
+
+        gameBoardCells.forEach((cell) => {
+            cell.textContent = "";
+        });
+
+        const playerWinDisplay = document.querySelector(".player-win-display");
+        playerWinDisplay.textContent = "";
+
     }
 
     function placeMarker(coordX, coordY, marker) {
@@ -133,11 +145,18 @@ function createPlayer(name, marker) {
 function playGame(e) {
     e.preventDefault();
 
+    // reset the board
+    gameBoard.resetBoard();
+
     const playerOneInput = document.querySelector("#player-one");
     const playerTwoInput = document.querySelector("#player-two");
 
     let playerOne = createPlayer(playerOneInput.value, "X");
     let playerTwo = createPlayer(playerTwoInput.value, "O");
+
+    // clear the input just before the game starts
+    playerOneInput.value = "";
+    playerTwoInput.value = "";
 
     let player = playerOne.playerName;
     let playerMarker = playerOne.playerMarker;
@@ -184,5 +203,10 @@ function playGame(e) {
     }
 };
 
-// Listen for form submission
+// start game
 playerInputForm.addEventListener("submit", playGame);
+
+// reset game
+resetButton.addEventListener("click", gameBoard.resetBoard);
+
+

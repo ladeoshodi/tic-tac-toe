@@ -81,6 +81,10 @@ form>div>input {
     align-items: center;
 }
 
+.game-board-cell:hover {
+    cursor: pointer;
+}
+
 @media screen and (max-width: 500px) {
     .header form {
         flex-direction: column;
