@@ -91,9 +91,9 @@ const gameBoard = (function() {
 
 const displayController = (function(){    
 
-    function displayTurn(PlayerName) {
+    function displayTurn(playerName, playerMarker) {
         const playerTurn = document.querySelector(".player-turn-display");
-        playerTurn.textContent = `${PlayerName}'s turn to play`;
+        playerTurn.textContent = `${playerName}'s turn to play [${playerMarker}]`;
     }
 
     function displayMarker(element, marker) {
@@ -115,7 +115,7 @@ function createPlayer(name, marker) {
     let playerMarker = marker;
 
     function play(coordX, coordY, element) {
-        gameBoard.placeMarker(coordX, coordY, playerMarker);
+        gameBoard.placeMarker(Number(coordX), Number(coordY), playerMarker);
         // display marker on the board
         displayController.displayMarker(element, playerMarker);
     }
@@ -133,9 +133,10 @@ function playGame(e) {
     let playerTwo = createPlayer(playerTwoInput.value, "O");
 
     let player = playerOne.playerName;
+    let playerMarker = playerOne.playerMarker;
 
     // Display the active player
-    displayController.displayTurn(player);
+    displayController.displayTurn(player, playerMarker);
 
     function onCellClick(e) {
         // get the coord of the cell that was clicked
@@ -147,13 +148,27 @@ function playGame(e) {
         if (player === playerOne.playerName) {
             playerOne.play(coordX, coordY, e);
             player = playerTwo.playerName;
+            playerMarker = playerTwo.playerMarker;
         } else {
             playerTwo.play(coordX, coordY, e);
             player = playerOne.playerName;
+            playerMarker = playerOne.playerMarker;
         }
 
         // Display the active player
-        displayController.displayTurn(player);
+        displayController.displayTurn(player, playerMarker);
+
+        console.log(gameBoard.currentBoard());
+
+        if (gameBoard.checkWin().win) {
+            if (gameBoard.checkWin().marker === playerOne.playerMarker) {
+                console.log(`${playerOne.playerName} wins!!!`)
+            } else {
+                console.log(`${playerTwo.playerName} wins!!!`)
+            }
+        } else {
+            console.log("It's a draw!")
+        }
     }
 
     // Add event listener to the game board after the game has started
@@ -161,39 +176,6 @@ function playGame(e) {
     for (let cell of gameBoardCells) {
         // add event listener
         cell.addEventListener("click", onCellClick, {once: true});
-    }
-
-    // while (!gameBoard.checkBoardComplete()) {
-    //     // break loop if we have a win condition
-    //     if (gameBoard.checkWin().win) {
-    //         break;
-    //     }
-
-    //     
-
-    //     // place the marker on the board
-    //     if (player === playerOne.playerName) {
-    //         // playerOne.play();
-    //         player = playerTwo.playerName;
-    //     } else {
-    //         // playerTwo.play();
-    //         player = playerOne.playerName;
-    //     }
-
-    //     // display board after each play
-    //     console.log(gameBoard.currentBoard());
-
-    //     break;
-    // }
-
-    if (gameBoard.checkWin().win) {
-        if (gameBoard.checkWin().marker === playerOne.playerMarker) {
-            console.log(`${playerOne.playerName} wins!!!`)
-        } else {
-            console.log(`${playerTwo.playerName} wins!!!`)
-        }
-    } else {
-        console.log("It's a draw!")
     }
 };
 
