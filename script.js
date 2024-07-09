@@ -106,7 +106,7 @@ const displayController = (function(){
             playerWinDisplay.textContent = "It's a draw!";
             alert("It's a draw!");
         } else {
-            playerWinDisplay.textContent = `${playerName} wins`;
+            playerWinDisplay.textContent = `${playerName} wins!`;
             alert(`${playerName} wins!`);
         }
     }

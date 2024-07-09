@@ -3,6 +3,7 @@ body {
     margin: 0;
     padding: 0;
     height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .header {
@@ -52,6 +53,14 @@ form>div>input {
 .game-info {
     text-align: center;
 }
+
+.player-win-display {
+    background-image: linear-gradient(90deg, #4e32d5, #ca256f);
+    background-clip: text;
+    color: transparent;
+    font-size: 3rem;
+}
+
 .game-board {
     display: grid;
     align-items: center;
