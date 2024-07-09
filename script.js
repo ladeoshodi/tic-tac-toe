@@ -73,7 +73,16 @@ const gameBoard = (function() {
         return gameResult
     }
 
-    return { currentBoard, resetBoard, placeMarker, checkEmptyCells, checkWin }
+    function checkBoardComplete() {
+        for (const coord of boardCoord) {
+            if (checkEmptyCells(coord[0], coord[1], coord[2])) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    return { currentBoard, resetBoard, placeMarker, checkEmptyCells, checkWin, checkBoardComplete}
 })();
 
 
@@ -96,7 +105,12 @@ function playGame() {
     let playerTwo = createPlayer(prompt("Player Two: please enter your name"), "O");
     let player = playerOne.playerName;
 
-    while (!gameBoard.checkWin().win) {
+    while (!gameBoard.checkBoardComplete()) {
+        // break loop if we have a win condition
+        if (gameBoard.checkWin().win) {
+            break;
+        }
+
         console.log(`it's ${player}'s turn`);
 
         // place the marker on the board
