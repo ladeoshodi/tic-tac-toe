@@ -1,9 +1,9 @@
 // create game board
 const gameBoard = (function() {
     let board = [
-        ["1", "2", ""],
-        ["4", "5", "6"],
-        ["7", "8", "9"]
+        ["", "", ""],
+        ["", "", ""],
+        ["", "", ""]
     ]
 
     let boardCoord = [
@@ -32,6 +32,10 @@ const gameBoard = (function() {
         ]
     }
 
+    function placeMarker(coordX, coordY, marker) {
+        board[coordX][coordY] = marker;
+    }
+
     function getCell(coord1, coord2, coord3) {
         return [
             board[coord1[0]][coord1[1]],
@@ -40,64 +44,33 @@ const gameBoard = (function() {
         ]
     }
 
-    function placeMarker(coordX, coordY, marker) {
-        board[coordX][coordY] = marker;
-    }
-
-    function checkEmptyCells() {
-        for (const coord of boardCoord) {
-            let cells = getCell(coord[0], coord[1], coord[2]);
-            if (cells.includes("")) {
-                return true;
-            }
+    function checkEmptyCells(coord1, coord2, coord3) {
+        let cells = getCell(coord1, coord2, coord3);
+        if (cells.includes("")) {
+            return true;
         }
         return false;
     }
 
+    function checkEqualCells(coord1, coord2, coord3) {
+        let cells = getCell(coord1, coord2, coord3);
+        return {
+            win: cells[0] === cells[1] && cells[1] === cells[2],
+            marker: cells[0]
+        };
+    }
+
     function checkWin() {
         let gameResult = {win: false, marker: ""};
-        // check row
-        if (board[0][0] !== "" && board[0][1] !== "" && board[0][2] !== "") {
-            if (board[0][0] === board[0][1] && board[0][1] === board[0][2]) {
-                gameResult = {win: true, marker: board[0][0]}
-            }
-        } else if (board[1][0] !== "" && board[1][1] !== "" && board[1][2] !== "") {
-            if (board[1][0] === board[1][1] && board[1][1] === board[1][2]) {
-                gameResult = {win: true, marker: board[1][0]}
-            }
-        } else if (board[2][0] !== "" && board[2][1] !== "" && board[2][2] !== "") {
-            if (board[2][0] === board[2][1] && board[2][1] === board[2][2]) {
-                gameResult = {win: true, marker: board[2][0]}
+        for (const coord of boardCoord) {
+            if (!checkEmptyCells(coord[0], coord[1], coord[2])) {
+                gameResult = checkEqualCells(coord[0], coord[1], coord[2]);
+                if (gameResult.win) {
+                    return gameResult;
+                }
             }
         }
-        
-        // check column
-        if (board[0][0] !== "" && board[1][0] !== "" && board[2][0] !== "") {
-            if (board[0][0] === board[1][0] && board[1][0] === board[2][0]) {
-                gameResult = {win: true, marker: board[0][0]}
-            }
-        } else if (board[0][1] !== "" && board[1][1] !== "" && board[2][1] !== "") {
-            if (board[0][1] === board[1][1] && board[1][1] === board[2][1]) {
-                gameResult = {win: true, marker: board[0][1]}
-            }
-        } else if (board[0][2] !== "" && board[1][2] !== "" && board[2][2] !== "") {
-            if (board[0][2] === board[1][2] && board[1][2] === board[2][2]) {
-                gameResult = {win: true, marker: board[0][2]}
-            }
-        }
-
-        // check diagonal
-        if (board[0][0] !== "" && board[1][1] !== "" && board[2][2] !== "") {
-            if (board[0][0] === board[1][1] && board[1][1] === board[2][2]) {
-                gameResult = {win: true, marker: board[0][0]}
-            }
-        } else if (board[0][2] !== "" && board[1][1] !== "" && board[2][0] !== "") {
-            if (board[0][2] === board[1][1] && board[1][1] === board[2][0]) {
-                gameResult = {win: true, marker: board[0][2]}
-            }
-        } 
-
-        return gameResult;
+        return gameResult
     }
 
     return { currentBoard, resetBoard, placeMarker, checkEmptyCells, checkWin }
@@ -123,7 +96,7 @@ function playGame() {
     let playerTwo = createPlayer(prompt("Player Two: please enter your name"), "O");
     let player = playerOne.playerName;
 
-    while (gameBoard.checkEmptyCells()) {
+    while (!gameBoard.checkWin().win) {
         console.log(`it's ${player}'s turn`);
 
         // place the marker on the board
@@ -137,10 +110,6 @@ function playGame() {
 
         // display board after each play
         console.log(gameBoard.currentBoard());
-
-        if (gameBoard.checkWin().win) {
-            break;
-        }
     }
 
     if (gameBoard.checkWin().win) {
@@ -158,4 +127,4 @@ function playGame() {
 console.log("This is a tic tac toe game on the console");
 console.log("You win by ensuring that 3 of your markers ('X' or 'O') lines up vertically, horizontally or diagonally");
 
-// playGame();
+playGame();
