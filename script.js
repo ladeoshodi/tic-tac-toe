@@ -86,24 +86,26 @@ const gameBoard = (function() {
         return true;
     }
 
-    return { currentBoard, resetBoard, placeMarker, checkEmptyCells, checkWin, checkBoardComplete}
+    return { currentBoard, resetBoard, placeMarker, checkEmptyCells, checkWin, checkBoardComplete }
 })();
 
-const displayController = (function(){
-    const gameBoardDisplay = document.querySelector(".game-board");
-    
-    const playerWinDisplay = document.querySelector(".player-win-display");
+const displayController = (function(){    
 
     function displayTurn(PlayerName) {
         const playerTurn = document.querySelector(".player-turn-display");
         playerTurn.textContent = `${PlayerName}'s turn to play`;
     }
 
+    function displayMarker(element, marker) {
+        element.target.textContent = marker;
+    }
+
     function displayWinner() {
+        const playerWinDisplay = document.querySelector(".player-win-display");
 
     }
 
-    return { displayTurn, displayWinner }
+    return { displayTurn, displayMarker, displayWinner }
 
 })();
 
@@ -112,10 +114,10 @@ function createPlayer(name, marker) {
     let playerName = name;
     let playerMarker = marker;
 
-    function play() {
-        let coordX = prompt(`${playerName}: please enter a row`);
-        let coordY = prompt(`${playerName}: please enter a column`);
+    function play(coordX, coordY, element) {
         gameBoard.placeMarker(coordX, coordY, playerMarker);
+        // display marker on the board
+        displayController.displayMarker(element, playerMarker);
     }
 
     return { playerName, playerMarker, play };
@@ -132,29 +134,57 @@ function playGame(e) {
 
     let player = playerOne.playerName;
 
-    while (!gameBoard.checkBoardComplete()) {
-        // break loop if we have a win condition
-        if (gameBoard.checkWin().win) {
-            break;
+    // Display the active player
+    displayController.displayTurn(player);
+
+    function onCellClick(e) {
+        // get the coord of the cell that was clicked
+        let cellCoord = e.target.getAttribute("data-coord");
+
+        let coordX, coordY;
+        [coordX, coordY] = cellCoord.split(",");
+
+        if (player === playerOne.playerName) {
+            playerOne.play(coordX, coordY, e);
+            player = playerTwo.playerName;
+        } else {
+            playerTwo.play(coordX, coordY, e);
+            player = playerOne.playerName;
         }
 
         // Display the active player
         displayController.displayTurn(player);
-
-        // place the marker on the board
-        if (player === playerOne.playerName) {
-            // playerOne.play();
-            player = playerTwo.playerName;
-        } else {
-            // playerTwo.play();
-            player = playerOne.playerName;
-        }
-
-        // display board after each play
-        console.log(gameBoard.currentBoard());
-
-        break;
     }
+
+    // Add event listener to the game board after the game has started
+    const gameBoardCells = document.querySelectorAll(".game-board-cell");
+    for (let cell of gameBoardCells) {
+        // add event listener
+        cell.addEventListener("click", onCellClick, {once: true});
+    }
+
+    // while (!gameBoard.checkBoardComplete()) {
+    //     // break loop if we have a win condition
+    //     if (gameBoard.checkWin().win) {
+    //         break;
+    //     }
+
+    //     
+
+    //     // place the marker on the board
+    //     if (player === playerOne.playerName) {
+    //         // playerOne.play();
+    //         player = playerTwo.playerName;
+    //     } else {
+    //         // playerTwo.play();
+    //         player = playerOne.playerName;
+    //     }
+
+    //     // display board after each play
+    //     console.log(gameBoard.currentBoard());
+
+    //     break;
+    // }
 
     if (gameBoard.checkWin().win) {
         if (gameBoard.checkWin().marker === playerOne.playerMarker) {
@@ -168,4 +198,6 @@ function playGame(e) {
 };
 
 // play game
+
+// Listen for form submission
 playerInputForm.addEventListener("submit", playGame);
