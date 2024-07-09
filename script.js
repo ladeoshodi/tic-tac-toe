@@ -1,6 +1,4 @@
 const playerInputForm = document.querySelector(".player-input-form");
-const resetButton = document.querySelector(".reset-button");
-
 
 // create game board
 const gameBoard = (function() {
@@ -150,10 +148,16 @@ function playGame(e) {
 
     const playerOneInput = document.querySelector("#player-one");
     const playerTwoInput = document.querySelector("#player-two");
+    const playerOneInfoDisplay = document.querySelector(".player-one-info");
+    const playerTwoInfoDisplay = document.querySelector(".player-two-info");
 
     let playerOne = createPlayer(playerOneInput.value, "X");
     let playerTwo = createPlayer(playerTwoInput.value, "O");
 
+    // Display the players on the main board
+    playerOneInfoDisplay.textContent = playerOne.playerName;
+    playerTwoInfoDisplay.textContent = playerTwo.playerName;
+   
     // clear the input just before the game starts
     playerOneInput.value = "";
     playerTwoInput.value = "";
@@ -205,8 +209,3 @@ function playGame(e) {
 
 // start game
 playerInputForm.addEventListener("submit", playGame);
-
-// reset game
-resetButton.addEventListener("click", gameBoard.resetBoard);
-
-

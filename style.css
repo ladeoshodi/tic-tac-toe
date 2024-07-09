@@ -59,6 +59,7 @@ form>div>input {
     background-clip: text;
     color: transparent;
     font-size: 3rem;
+    font-weight: bold;
 }
 
 .game-board {
