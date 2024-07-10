@@ -1,14 +1,15 @@
 const playerInputForm = document.querySelector(".player-input-form");
+let playerOne, playerTwo;
 
 // create game board
 const gameBoard = (function() {
-    let board = [
+    const board = [
         ["", "", ""],
         ["", "", ""],
         ["", "", ""]
     ]
 
-    let boardCoord = [
+    const boardCoord = [
         // row coordinates
         [[0, 0], [0, 1], [0, 2]],
         [[1, 0], [1, 1], [1, 2]],
@@ -23,16 +24,16 @@ const gameBoard = (function() {
     ]
 
     function currentBoard() {
-        return board
+        return board;
     }
 
     function resetBoard() {
         // reset board internal memory
-        board = [
-            ["", "", ""],
-            ["", "", ""],
-            ["", "", ""]
-        ]
+        boardCoord.forEach((group) => {
+            group.forEach((coord) => {
+                board[coord[0]][coord[1]] = "";
+            });
+        });
 
         // reset board display
         const gameBoardCells = document.querySelectorAll(".game-board-cell");
@@ -127,8 +128,8 @@ const displayController = (function(){
 
 // Create a player object
 function createPlayer(name, marker) {
-    let playerName = name;
-    let playerMarker = marker;
+    const playerName = name;
+    const playerMarker = marker;
 
     function play(coordX, coordY, element) {
         gameBoard.placeMarker(Number(coordX), Number(coordY), playerMarker);
@@ -151,8 +152,8 @@ function playGame(e) {
     const playerOneInfoDisplay = document.querySelector(".player-one-info");
     const playerTwoInfoDisplay = document.querySelector(".player-two-info");
 
-    let playerOne = createPlayer(playerOneInput.value, "X");
-    let playerTwo = createPlayer(playerTwoInput.value, "O");
+    playerOne = createPlayer(playerOneInput.value, "X");
+    playerTwo = createPlayer(playerTwoInput.value, "O");
 
     // Display the players on the main board
     playerOneInfoDisplay.textContent = playerOne.playerName;
