@@ -115,10 +115,8 @@ const displayController = (function(){
         const playerWinDisplay = document.querySelector(".player-win-display");
         if (playerDraw) {
             playerWinDisplay.textContent = "It's a draw!";
-            alert("It's a draw!");
         } else {
             playerWinDisplay.textContent = `${playerName} wins!`;
-            alert(`${playerName} wins!`);
         }
     }
 
